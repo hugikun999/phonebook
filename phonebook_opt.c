@@ -3,14 +3,22 @@
 
 #include "phonebook_opt.h"
 
+static entry *record;
+static int branch = 0;
+
 /* FILL YOUR OWN IMPLEMENTATION HERE! */
 entry *findName(char lastName[], entry *pHead)
 {
     /* TODO: implement */
+    pHead = pHead->pNext;
+
     while (pHead != NULL) {
-        if (strcasecmp(lastName, pHead->lastName) == 0)
-            return pHead;
-        pHead = pHead->pNext;
+        if(lastName[0] == pHead->lastName[0]) {
+            if (strcasecmp(lastName, pHead->lastName) == 0)
+                return pHead;
+            pHead = pHead->pNext;
+        } else
+            pHead = pHead->pOther;
     }
 
     return NULL;
@@ -18,10 +26,29 @@ entry *findName(char lastName[], entry *pHead)
 
 entry *append(char lastName[], entry *e)
 {
-    e->pNext = (entry *) malloc(sizeof(entry));
-    e = e->pNext;
-    strcpy(e->lastName, lastName);
-    e->pNext = NULL;
-
-    return e;
+    if(branch == 0) {
+        e->pNext = (entry *) malloc(sizeof(entry));
+        e = e->pNext;
+        strcpy(e->lastName, lastName);
+        e->pNext = NULL;
+        e->detail = NULL;
+        branch++;
+        record = e;
+        return e;
+    } else if(e->lastName[0] == lastName[0]) {
+        e->pNext = (entry *) malloc(sizeof(entry));
+        e = e->pNext;
+        e->detail = NULL;
+        strcpy(e->lastName, lastName);
+        return e;
+    } else {
+        e = record;
+        e->pOther = (entry *) malloc(sizeof(entry));
+        e = e->pOther;
+        strcpy(e->lastName, lastName);
+        e->pNext = NULL;
+        e->detail = NULL;
+        record = e;
+        return e;
+    }
 }

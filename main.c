@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
 
 #ifdef OPT
     e->detail = NULL;
+    e->pOther = NULL;
 #endif
 
 #if defined(__GNUC__)
@@ -58,9 +59,9 @@ int main(int argc, char *argv[])
 #endif
     clock_gettime(CLOCK_REALTIME, &start);
     while (fgets(line, sizeof(line), fp)) {
-        while (line[i] != '\0')
+        while (line[i] != '\n')
             i++;
-        line[i - 1] = '\0';
+        line[i] = '\0';
         i = 0;
         e = append(line, e);
     }
@@ -83,6 +84,7 @@ int main(int argc, char *argv[])
 #if defined(__GNUC__)
     __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));
 #endif
+
     /* compute the execution time */
     clock_gettime(CLOCK_REALTIME, &start);
     findName(input, e);
