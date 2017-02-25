@@ -49,6 +49,10 @@ int main(int argc, char *argv[])
     e = pHead;
     e->pNext = NULL;
 
+#ifdef OPT
+    e->detail = NULL;
+#endif
+
 #if defined(__GNUC__)
     __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));
 #endif
@@ -84,7 +88,7 @@ int main(int argc, char *argv[])
     findName(input, e);
     clock_gettime(CLOCK_REALTIME, &end);
     cpu_time2 = diff_in_second(start, end);
-
+    printf("OUT_FILE is : %s\n", OUT_FILE);
     FILE *output = fopen(OUT_FILE, "a");
     fprintf(output, "append() findName() %lf %lf\n", cpu_time1, cpu_time2);
     fclose(output);
