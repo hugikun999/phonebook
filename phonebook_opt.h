@@ -3,17 +3,16 @@
 
 #define MAX_LAST_NAME_SIZE 16
 
-/* TODO: After modifying the original version, uncomment the following
- * line to set OPT properly */
+/* line to set OPT properly */
 
-typedef struct __PHONE_BOOK_ENTRY {
+typedef struct __attribute__ ((__packed__)) __PHONE_BOOK_ENTRY {
     char lastName[MAX_LAST_NAME_SIZE];
     struct __PHONE_BOOK_ENTRY *pNext;
-    struct __PHONE_BOOK_ENTRY *pOther;
     struct __PHONE_BOOK_DETAIL *detail;
+    struct __PHONE_BOOK_ENTRY *pOther;
 } entry;
 
-typedef struct __PHONE_BOOK_DETAIL {
+typedef struct __attribute__ ((__packed__))  __PHONE_BOOK_DETAIL {
     char firstName[16];
     char email[16];
     char phone[10];
@@ -24,6 +23,15 @@ typedef struct __PHONE_BOOK_DETAIL {
     char state[2];
     char zip[5];
 } detail;
+
+/*typedef struct hash_info {
+	unsigned int hash_value;
+	struct __PHONE_BOOK_ENTRY *e;
+	struct __PHONE_BOOK_ENTRY *pHead;
+
+	hash_info(): hash_value(0), e(NULL), pHead(NULL)
+	{}
+}*/
 
 entry *findName(char lastName[], entry *pHead);
 entry *append(char lastName[], entry *e);

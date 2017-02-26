@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "phonebook_opt.h"
 
@@ -9,7 +10,6 @@ static int branch = 0;
 /* FILL YOUR OWN IMPLEMENTATION HERE! */
 entry *findName(char lastName[], entry *pHead)
 {
-    /* TODO: implement */
     pHead = pHead->pNext;
 
     while (pHead != NULL) {
@@ -31,14 +31,14 @@ entry *append(char lastName[], entry *e)
         e = e->pNext;
         strcpy(e->lastName, lastName);
         e->pNext = NULL;
-        e->detail = NULL;
+        e->detail = (detail *) malloc(sizeof(detail));
         branch++;
         record = e;
         return e;
     } else if(e->lastName[0] == lastName[0]) {
         e->pNext = (entry *) malloc(sizeof(entry));
         e = e->pNext;
-        e->detail = NULL;
+        e->detail = (detail *) malloc(sizeof(detail));
         strcpy(e->lastName, lastName);
         return e;
     } else {
@@ -47,7 +47,7 @@ entry *append(char lastName[], entry *e)
         e = e->pOther;
         strcpy(e->lastName, lastName);
         e->pNext = NULL;
-        e->detail = NULL;
+        e->detail = (detail *) malloc(sizeof(detail));
         record = e;
         return e;
     }
