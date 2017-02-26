@@ -3,7 +3,7 @@ CFLAGS_common ?= -Wall -std=gnu99
 CFLAGS_orig = -O0
 CFLAGS_opt  = -O0
 
-EXEC = phonebook_orig phonebook_opt
+EXEC = phonebook_orig phonebook_opt phonebook_hash
 
 GIT_HOOKS := .git/hooks/pre-commit
 
@@ -26,10 +26,11 @@ phonebook_opt: $(SRCS_common) phonebook_opt.c phonebook_opt.h
 		-DIMPL=" \"$@.h\" "	-DOPT	-DSELF_MET	-o $@ \
 		$(SRCS_common) $@.c
 
-phonebook_hash: $(SRCS_common) phonebook_opt.c phonebook_opt.h
+phonebook_hash: main_hash.c phonebook_hash.c phonebook_hash.h
+	rm -rf $@
 	$(CC) $(CFLAGS_common) $(CFLAGS_opt) \
-		-DIMPL="\"phonebook_opt.h\"" -DOPT -DHASH	-o $@ \
-		$(SRCS_common) phonebook_opt.c
+		-DIMPL="\"phonebook_hash.h\""	-o $@ \
+		main_hash.c $@.c
 
 run: $(EXEC)
 	echo 3 | sudo tee /proc/sys/vm/drop_caches
@@ -45,6 +46,9 @@ cache-test: $(EXEC) rm_file
 	perf stat --repeat 100 \
 		-e cache-misses,cache-references,instructions,cycles \
 		./phonebook_opt
+	perf stat --repeat 100 \
+		-e cache-misses,cache-references,instructions,cycles \
+		./phonebook_hash
 
 output.txt: cache-test calculate
 	./calculate
