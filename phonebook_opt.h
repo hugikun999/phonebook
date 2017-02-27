@@ -24,15 +24,6 @@ typedef struct __attribute__ ((__packed__))  __PHONE_BOOK_DETAIL {
     char zip[5];
 } detail;
 
-/*typedef struct hash_info {
-	unsigned int hash_value;
-	struct __PHONE_BOOK_ENTRY *e;
-	struct __PHONE_BOOK_ENTRY *pHead;
-
-	hash_info(): hash_value(0), e(NULL), pHead(NULL)
-	{}
-}*/
-
 entry *findName(char lastName[], entry *pHead);
 entry *append(char lastName[], entry *e);
 
