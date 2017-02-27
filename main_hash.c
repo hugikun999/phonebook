@@ -5,7 +5,6 @@
 #include <assert.h>
 
 #include IMPL
-//#include "phonebook_hash.c"
 
 #define OUT_FILE "hash.txt"
 
@@ -51,9 +50,9 @@ int main(int argc, char *argv[])
     }
 
 
-    /*	#if defined(__GNUC__)
-    	__builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));
-    	#endif*/
+#if defined(__GNUC__)
+    __builtin___clear_cache((char *) hash_table, (char *) hash_table + (sizeof(Hash_Table) * table_size));
+#endif
 
     clock_gettime(CLOCK_REALTIME, &start);
     while (fgets(line, sizeof(line), fp)) {
@@ -82,9 +81,9 @@ int main(int argc, char *argv[])
            "Did you implement findName() in " IMPL "?");
     assert(0 == strcmp(findName_hash(input, (hash_table + hash_value))->lastName, "zyxel"));
 
-    /*	#if defined(__GNUC__)
-            __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));
-        #endif*/
+#if defined(__GNUC__)
+    __builtin___clear_cache((char *) hash_table, (char *) hash_table + (sizeof(Hash_Table) * table_size));
+#endif
 
     /* compute the execution time */
     clock_gettime(CLOCK_REALTIME, &start);

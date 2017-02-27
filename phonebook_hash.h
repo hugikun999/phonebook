@@ -23,7 +23,7 @@ typedef struct __attribute__ ((__packed__))  __PHONE_BOOK_DETAIL {
     char zip[5];
 } detail;
 
-typedef struct __HASH_TABLE {
+typedef struct __attribute__ ((__packed__)) __HASH_TABLE {
     entry *pHead;
     entry *pLast;
 } Hash_Table;
