@@ -23,18 +23,13 @@ typedef struct __attribute__ ((__packed__))  __PHONE_BOOK_DETAIL {
     char zip[5];
 } detail;
 
-typedef struct hash_table {
-    unsigned int *hash_value;
-    struct __PHONE_BOOK_ENTRY *e;
-    struct __PHONE_BOOK_ENTRY *eHead;
-    struct hash_table *pNext;
+typedef struct __HASH_TABLE {
+    entry *pHead;
+    entry *pLast;
+} Hash_Table;
 
-    /*	hash_info(): hash_value(NULL), e(NULL), pHead(NULL), pNext(NULL)
-    	{}*/
-} hash_table;
-
-bool findName_hash(char lastName[], hash_table *hash_head, unsigned int hash_value);
-void append_hash(char lastName[], hash_table *hash_head, unsigned int hash_value);
+entry *findName_hash(char lastName[], Hash_Table *hash_head);
+void append_hash(char lastName[], Hash_Table *hash_head);
 unsigned int BKDRHash(char *str);
 
 #endif
