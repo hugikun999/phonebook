@@ -27,12 +27,14 @@ static double diff_in_second(struct timespec t1, struct timespec t2)
 int main(int argc, char *argv[])
 {
     FILE *fp;
-    int i = 0;
+    int i = 0, table_size;
     unsigned int hash_value;
     char line[MAX_LAST_NAME_SIZE];
     struct timespec start, end;
     double cpu_time1, cpu_time2;
     Hash_Table *hash_table;
+
+    table_size = atoi(argv[1]);
 
     /* check file opening */
     fp = fopen(DICT_FILE, "r");
@@ -41,8 +43,9 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    hash_table = (Hash_Table *) malloc(sizeof(Hash_Table) * 31);
-    for(int i = 0; i < 31; i++) {
+    hash_table = (Hash_Table *) malloc(sizeof(Hash_Table) * table_size);
+    printf("Hash table size: %lu bytes\n", sizeof(Hash_Table) * table_size);
+    for(int i = 0; i < table_size; i++) {
         (hash_table + i)->pHead = NULL;
         (hash_table + i)->pLast = NULL;
     }
@@ -60,7 +63,7 @@ int main(int argc, char *argv[])
         i = 0;
 
         hash_value = BKDRHash(line);
-        hash_value = hash_value % 31;
+        hash_value = hash_value % table_size;
         append_hash(line, (hash_table + hash_value));
     }
     clock_gettime(CLOCK_REALTIME, &end);
@@ -73,7 +76,7 @@ int main(int argc, char *argv[])
     /* the givn last name to find */
     char input[MAX_LAST_NAME_SIZE] = "zyxel";
     hash_value = BKDRHash(input);
-    hash_value = hash_value % 31;
+    hash_value = hash_value % table_size;
 
     assert(findName_hash(input, (hash_table + hash_value)) &&
            "Did you implement findName() in " IMPL "?");
@@ -91,7 +94,7 @@ int main(int argc, char *argv[])
 
     printf("OUT_FILE is : %s\n", OUT_FILE);
     FILE *output = fopen(OUT_FILE, "a");
-    fprintf(output, "append() findName() %lf %lf\n", cpu_time1, cpu_time2);
+    fprintf(output, "%d %lf %lf\n", table_size, cpu_time1, cpu_time2);
     fclose(output);
 
     printf("execution time of append() : %lf sec\n", cpu_time1);
